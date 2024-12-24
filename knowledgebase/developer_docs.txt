@@ -1,0 +1,976 @@
+Getting Started
+
+Details about open campus here
+
+Network Details
+
+Network Attribute	Value
+chainID	656476
+Settlement Layer	Arbitrum Sepolia 421614
+RPC Url	https://rpc.open-campus-codex.gelato.digital
+Explorer	https://opencampus-codex.blockscout.com/
+The public summary of the network can be found at https://raas.gelato.network/rollups/details/public/open-campus-codex
+
+Overview of Docs
+Open Campus Codex - Explains comprehensive insights into the architecture of Open Campus Codex.
+Build - Find all the resources you need to start testing, deploying, and interacting with smart contracts on Open Campus Codex.
+Services - Find all services deployed on Open Campus Codex and start levelling-up your applications.
+
+What is Open Campus?
+Open Campus, also known as EDU Chain, is the first Layer 3 (L3) blockchain built specifically for the education industry. It aims to leverage the traditional educational landscape by bringing it on-chain, creating a secure and transparent ecosystem for all educational activities.
+
+Educational Blockchain: The first of its kind L3 blockchain tailored for educational purposes.
+Learn-to-Earn Ecosystem: A vibrant platform that links learning with earning, providing real-world value to educational achievements.
+Transparency and Security: Blockchain technology ensures that all educational records and transactions are secure, immutable, and transparent.
+Trackable Learning Journey: Every educational milestone and achievement is recorded on the blockchain, making it easy to track and verify progress.
+
+Arbitrum Orbit Overview
+Arbitrum Orbit is an Optimistic rollup-based framework designed to empower web3 businesses by enabling the creation of custom, use case-specific Layer 2 (L2) or Layer 3 (L3) chains in a purely permissionless way. Orbit leverages the Arbitrum Nitro Tech stack, offering unparalleled scalability, advanced compression, full EVM compatibility, and soon-to-be-released cross-chain interoperability. Essentially, Arbitrum Orbit can be thought of as deployable and configurable instances of the Nitro stack, forming an ecosystem of independent chains.
+
+Key Features of Arbitrum Orbit
+Customizable Throughput: Orbit chains provide dedicated throughput, ensuring high performance and resource availability tailored to specific dApp requirements.
+EVM+ Compatibility: Support for multiple programming languages (Rust, C++, C, and Solidity) through Stylus, enabling flexible and cost-effective smart contract development.
+Predictable Gas Costs: Isolated transaction environments ensure stable and predictable gas fees, crucial for business cost forecasting.
+Broad Data Availability Options: Flexibility to choose data availability models, including Ethereum Layer 1 or Data Availability Committees (DACs) for off-chain storage.
+Robust Security: Leveraging Ethereum's security and the Arbitrum Nitro tech stack ensures a high level of security for Orbit chains.
+By choosing Arbitrum Orbit, Open Campus leverages a powerful, flexible, and scalable blockchain solution that meets our unique needs. This partnership enables us to build an innovative educational platform that redefines the Learn-to-Earn model, offering unparalleled benefits to our users.
+
+How to Run a Full Node for an Orbit Chain
+This section provides step-by-step instructions for running an Orbit node on your local machine.
+
+Prerequisites
+Latest Docker Image: offchainlabs/nitro-node:v2.3.4-b4cc111
+Minimum Hardware Configuration
+RAM: 8-16 GB
+CPU: 2-4 core CPU (e.g., AWS t3.xLarge)
+Storage: Depends on the Orbit chain and its traffic over time
+Required Parameters
+1. Parent Chain Parameters
+The --parent-chain.connection.url argument requires a standard RPC endpoint for an EVM node, whether self-hosted or obtained from a node service provider:
+
+--parent-chain.connection.url=<Parent chain RPC URL>
+
+2. Child Chain Parameters
+In the Arbitrum Orbit context, the child chain is an L2 or an L3 Orbit chain. The required parameters are chain.info-json and chain.name.
+
+chain.info-json A JSON string that contains required information about the Orbit chain.
+
+--chain.info-json=<Orbit Chain's chain info>
+
+chain.name A mandatory flag that needs to match the chain name used in --chain.info-json:
+
+--chain.name=<Orbit Chain's name>
+
+AnyTrust Chains For AnyTrust chains, add the following flags to the command or configuration:
+--node.data-availability.enable
+--node.data-availability.rest-aggregator.urls=<A list of DAS REST endpoints>
+
+Or
+
+--node.data-availability.rest-aggregator.online-url-list=<A URL that returns a list of the DAS REST endpoints>
+
+4. Important Ports
+Protocol	Port
+RPC/http	8547
+RPC/websocket	8548
+Sequencer Feed	9642
+For the RPC/websocket protocol, use the following flags:
+
+--ws.port=8548
+--ws.addr=0.0.0.0
+--ws.origins=\*
+
+5. Putting it all together
+When running a Docker image, an external volume should be mounted to persist the database across restarts. The mount point inside the Docker image should be /home/user/.arbitrum.
+
+Example:
+
+docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/nitro-node:v2.3.4-b4cc111 --parent-chain.connection.url=<Parent chain RPC URL> --chain.id=<OrbitChainId> --chain.name=<My Arbitrum Orbit Chain> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --chain.info-json=<Orbit Chain's chain info>
+
+
+Ensure that /some/local/dir/arbitrum already exists; otherwise, the directory might be created with root as the owner, and the Docker container won't be able to write to it.
+
+When using the flag --chain.info-json=<Orbit Chain's chain info>, replace <Orbit Chain's chain info> with the specific chain info JSON string of the Orbit chain for which you wish to run the node.
+
+Example:
+
+    --chain.info-json="[{\"chain-id\":94692861356,\"parent-chain-id\":421614,\"chain-name\":\"My Arbitrum L3 Chain\",\"chain-config\":{\"chainId\":94692861356,\"homesteadBlock\":0,\"daoForkBlock\":null,\"daoForkSupport\":true,\"eip150Block\":0,\"eip150Hash\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\"eip155Block\":0,\"eip158Block\":0,\"byzantiumBlock\":0,\"constantinopleBlock\":0,\"petersburgBlock\":0,\"istanbulBlock\":0,\"muirGlacierBlock\":0,\"berlinBlock\":0,\"londonBlock\":0,\"clique\":{\"period\":0,\"epoch\":0},\"arbitrum\":{\"EnableArbOS\":true,\"AllowDebugPrecompiles\":false,\"DataAvailabilityCommittee\":false,\"InitialArbOSVersion\":10,\"InitialChainOwner\":\"0xAde4000C87923244f0e95b41f0e45aa3C02f1Bb2\",\"GenesisBlockNum\":0}},\"rollup\":{\"bridge\":\"0xde835286442c6446E36992c036EFe261AcD87F6d\",\"inbox\":\"0x0592d3861Ea929B5d108d915c36f64EE69418049\",\"sequencer-inbox\":\"0xf9d77199288f00440Ed0f494Adc0005f362c17b1\",\"rollup\":\"0xF5A42aDA664E7c2dFE9DDa4459B927261BF90E09\",\"validator-utils\":\"0xB11EB62DD2B352886A4530A9106fE427844D515f\",\"validator-wallet-creator\":\"0xEb9885B6c0e117D339F47585cC06a2765AaE2E0b\",\"deployed-at\":1764099}}]"
+
+
+Further Reading
+For more detailed instructions and additional configuration options, please refer to the Arbitrum documentation here.
+
+Block Explorer
+The Open Campus block explorer provides a comprehensive and user-friendly interface for monitoring and analyzing network activities. It is designed to offer key insights and information beneficial for both regular users and developers. Features of the Open Campus block explorer include:
+
+Address Balances: Check the balance of any address on the network.
+Transaction History: View detailed transaction records.
+Verified Contracts: Access and review verified smart contract codes.
+Smart Contract Code and Execution: Examine the code and execution details of smart contracts.
+Network Statistics: Get up-to-date information on network performance.
+Mining Information: Monitor mining activities and related statistics.
+
+https://edu-chain-testnet.blockscout.com/
+
+Quick Start
+Overview
+Open Campus is a Layer-3 solution enhancing Ethereum, providing an EVM-compatible environment for seamless integration. It utilizes advanced cryptographic techniques for efficiency and inherits Ethereum's security.
+
+Connecting to Codex
+Reminder
+Open Campus Codex and its related documentation are under active development.
+
+All feedback is welcome and highly appreciated. Please report errors or inconsistencies to a team member or as an issue on our Issues Tracker, thank you.
+
+To manually add the Open Campus Codex network to your wallet, use the following details:
+
+Codex
+RPC URL	ChainID	Block Explorer URL	Currency
+https://rpc.open-campus-codex.gelato.digital	656476	Codex Block Explorer	EDU
+To add the network to MetaMask, you can either enter the data above manually or use the link provided at the bottom of the Codex Block Explorer page.
+
+Bridging Assets to Open Campus Codex Testnet
+To start interacting with the Open Campus Codex Testnet, you'll need to bridge your assets. Bridging assets involves transferring cryptocurrencies from one blockchain (Arbitrum Sepolia) to another (Open Campus Codex). This process expands your asset's utility by enabling its use within the Open Campus ecosystem.
+
+To bridge your assets, follow the guide on asset bridging provided below.
+
+Learn more about bridging assets ↗️
+
+Deploying Smart Contracts on Codex
+Open Campus Codex provides a development environment that is designed to be familiar to those who have worked with Ethereum. It allows developers to deploy smart contracts using existing Ethereum tools and workflows, ensuring a smooth transition and a user experience characterized by higher throughput and reduced transaction costs.
+
+To learn more about how to deploy your smart contracts to the Codex, refer to our comprehensive guide below.
+
+Deploy Smart Contracts on Codex ↗️
+
+Support Channels
+For support, developers can consult the community on platforms like StackExchange or join the official Discord server.
+
+Faucet
+Obtaining Testnet Tokens
+To acquire testnet tokens for network transactions, utilize the dRPC faucet that distributes testnet ETH. Follow the verification process to receive your tokens.
+
+Verification Process
+To ensure fair and equitable access, you need to complete the following verification steps:
+
+dRPC Authorization
+
+Log in or create an account with dRPC. It's fast and free.
+Proof-of-Work
+
+This faucet requires mining for free testnet tokens to prevent abuse and spam. Note that the process of "mining" doesn't create new coins; it's just a time-limited method of protection.
+Connecting Wallet to Testnet
+Configure your wallet to connect to the Sepolia testnet where you can receive testnet ETH.
+
+Using dRPC Faucet
+Access the dRPC faucet to obtain EDU:
+
+https://drpc.org/faucet/open-campus-codex
+
+Once you have the EDU, you can proceed with testing and development on the Open Campus network.
+
+Asset Bridging
+Overview
+Bridging assets to Open Campus is an essential process for users who wish to interact with the Open Campus network. This section provides a comprehensive guide on how to bridge your assets effectively.
+
+Direct Arbitrum Sepolia to Open Campus Codex Bridge: This is the primary method to transfer assets directly from Arbitrum Sepolia to Open Campus Codex, which is essential for executing transactions on Open Campus Codex.
+Step-by-Step Guide to Using the Official Bridge Portal
+
+https://bridge.gelato.network/bridge/open-campus-codex
+
+Write a Contract
+This document explains how to automatically write any smart contract using the OpenZeppelin Wizard. The resulting smart contract code can either be integrated with Remix by Clicking the Open in Remix button, or copied to clipboard and pasted in the user's intended IDE.
+
+Getting Started
+Navigate to the OpenZeppelin Wizard in your browser. First thing to notice is the Solidity Wizard and Cairo Wizard buttons.
+
+One can choose any of the following tabs to begin creating an out-of-box smart contract code in either Solidity (for EVM chains) or Cairolang (useful for Starknet). These are:
+
+ERC20: for writing an ERC-20 token smart contract
+ERC721: for writing an NFT token smart contract
+ERC1155: for writing an ERC-1155 token smart contract
+Governor: for creating a DAO
+Custom: for writing a customized smart contract
+Writing An NFT Contract
+For illustration purpose, we will be creating a NFT smart contract. Suppose you wanted to create a Mintable, Burnable ERC721 token and specify an appropriate license for it.
+
+Select the ERC721 tab.
+
+Give your NFT a name and a symbol by filling the Name and Symbol fields.
+
+Use the check-boxes on the left to select features of your token
+
+Put a tick on the Mintable check-box
+Put a tick on the Auto Increment Ids check-box, this ensures uniqueness of each minted NFT
+Put a tick on the Burnable check-box
+Either leave the default MIT license or type the license of your choice
+Notice that new lines of code are automatically written each time a feature is selected.
+
+Voila! Contract Ready
+With the resulting lines of code, you now have the NFT token contract written in Solidity. As mentioned above, this source code can now be ported to an IDE of your choice or opened directly in Remix.
+
+The below figure depicts the auto-written NFT smart contract code.
+
+Deploy Using Hardhat
+Hardhat is a popular smart contract development frameworks. In this tutorial, we will be using Hardhat to deploy a simple Counter smart contract to the Custom Rollup Testnet. We will explore the basics of creating a Hardhat project with a sample contract and a script to deploy it.
+
+For the full instruction on how to use Hardhat, please refer to the official Hardhat documentation.
+
+Create New Project
+Start with creating an npm project by going to an empty folder, running npm init, and following its instructions. You can use another package manager, like yarn, but Hardhat recommends you use npm 7 or later, as it makes installing Hardhat plugins simpler.
+
+Hardhat Smart Contract
+To create the sample project, run npx hardhat init in your project folder:
+
+Press <ENTER> choose javascript, typescript or empty project
+Press <ENTER> to set the project root
+Press <ENTER> again to accept addition of .gitignore
+Press <ENTER> to install hardhat @nomicfoundation/hardhat-toolbox
+Create deployer account
+Create the .env file in your project root folder and add the following line:
+ACCOUNT_PRIVATE_KEY='my private key'
+
+Populate the .env file with your private key. You can get your private key from Metamask. See the section below on how to get your private key from Metamask.
+How to get your Private Key in Metamask
+warning
+Do not commit your private key to a public repository!
+
+Verify that your .gitignore file contains .env to prevent your private key from being committed to a public repository.
+
+Configure Hardhat
+Open the hardhat.config.js file and paste the code below:
+Javascript
+Typescript
+import { HardhatUserConfig } from "hardhat/config";
+import "@nomicfoundation/hardhat-toolbox";
+import * as dotenv from "dotenv";
+
+dotenv.config({ path: __dirname + "/.env" });
+const ACCOUNT_PRIVATE_KEY = process.env.ACCOUNT_PRIVATE_KEY || "";
+console.log("PrivateKey set:", !!ACCOUNT_PRIVATE_KEY);
+
+const config: HardhatUserConfig = {
+  solidity: "0.8.19",
+  paths: {
+    artifacts: "./src",
+  },
+  networks: {
+    opencampus: {
+      url: `https://rpc.open-campus-codex.gelato.digital/`,
+      accounts: [ACCOUNT_PRIVATE_KEY],
+    },
+  },
+  etherscan: {
+    apiKey: {
+      opencampus: "xxx",
+    },
+    customChains: [
+      {
+        network: "opencampus",
+        chainId: 656476,
+        urls: {
+          apiURL: "https://opencampus-codex.blockscout.com/api",
+          browserURL: "https://opencampus-codex.blockscout.com",
+        },
+      },
+    ],
+  },
+};
+
+export default config;
+
+Write Smart Contract
+info
+Note: The existing smart contract code that comes with the sample project is a Lock.sol contract. Feel free to delete it or leave it.
+
+Create a new file, in the contracts folder, named Counter.sol:
+touch contracts/Counter.sol
+
+Copy the below code and paste it in the Counter.sol contract code:
+//SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+contract Counter {
+uint256 currentCount = 0;
+
+    function increment() public {
+        currentCount = currentCount + 1;
+    }
+
+    function retrieve() public view returns (uint256){
+        return currentCount;
+    }
+}
+
+Create Deploy Script
+Delete the content of the scripts/deploy.js file and add the code below:
+const hre = require("hardhat");
+
+async function main() {
+  const deployedContract = await hre.ethers.deployContract("Counter");
+  await deployedContract.waitForDeployment();
+  console.log(`Counter contract deployed to ${deployedContract.target}`);
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
+
+Compile Contract
+Install dotenv package: npm install dotenv
+Compile your contract code (i.e., go back to the project root in the CLI),
+npx hardhat compile
+
+Deploy Contract
+Run the deploy script:
+
+npx hardhat run scripts/deploy.js --network opencampus
+
+Verify Contracts
+Once verified, a smart contract or token contract's source code becomes publicly available and verifiable, creating transparency and trust.
+
+There are several ways to verify a contract, programmatically or manually on the UI.
+
+Verify on the UI
+Go the the verify contract page (Other -> Verify Contract)
+Enter in the contract address you received during deployment. The dropdown will show you several available verification options. Select the one you would like to use and continue.
+Solidity (Flattended source code)
+Solidity (Standard JSON Input)
+Solidity (Flattened Source Code)
+
+Contract Address: The 0x address supplied on contract creation (added above)
+Is Yul Contract: Select if the contract is coded in Yul for efficiency.
+Include Nightly Builds: Select if you want to show nightly builds.
+Compiler: derived from the first line in the contract pragma solidity X.X.X. Use the corresponding compiler version rather than the nightly build.
+EVM Version: Select the correct EVM version if known, otherwise use default.
+EVM Version: Select the correct EVM version if known, otherwise use default.
+Enter the Solidity Contract Code: You may need to flatten your solidity code if it utilizes a library or inherits dependencies from another contract. We recommend hardhat or the POA solidity flattener. To flatten your contract using contract, run:
+yarn hardhat flatten .\contracts\<your-contract>.sol > flattened.sol
+
+Add Contract Libraries: Enter the name and 0x address for any required libraries called in the .sol file. You can add multiple contracts with the "+" button.
+Click the Verify and Publish button.
+If all goes well, you will see a checkmark next to Code in the code tab, and an additional tab called Read Contract. The contract name will now appear in BlockScout with any transactions related to your contract.
+Solidity (Standard JSON Input)
+
+Include nightly builds. You can choose Yes or No depending on your compiler.
+Compiler. Choose the compiler version used to compile your smart contract. If you selected yes for nightly builds, use the compiler version rather than the build.
+Standard Input JSON. Upload your Standard Input JSON file. File should follows solidity format and all the sources must be in Literal Content format, not a URL.
+Click the Verify & publish button and wait for the response.
+
+Verify Programmatically
+To verify contracts please follow the Verifying a Smart Contract guide to learn the different options.
+
+In particular, to be able to verify the contracts programatically we will need following steps:
+
+1- Install @nomiclabs/hardhat-etherscan package:
+
+yarn add --dev @nomiclabs/hardhat-etherscan
+
+2- Import into hardhat.config.ts
+
+import "@nomiclabs/hardhat-etherscan";
+
+3- Update hardhat.config.ts following:
+
+     apiKey: {
+      opencampus: "XXX", // no key required
+    },
+    customChains: [
+      {
+        network: "opencampus",
+        chainId: 656476,
+        urls: {
+          apiURL: "https://opencampus-codex.blockscout.com/api",
+          browserURL: "https://opencampus-codex.blockscout.com/",
+        },
+      },
+    ],
+
+4- Verify the contract Once the config is updated, you can verofy the contract with
+
+npx hardhat verify --network opencampus YOUR-CONTRACT-ADDRESS YOUR-CONSTRUCTOR-ARGUMENTS
+
+Open Campus ID Connect SDK
+Where can i get it?
+Download it via npm here: https://www.npmjs.com/package/@opencampus/ocid-connect-js
+
+Github documentation is here: https://github.com/opencampus-xyz/ocid-connect-js
+
+Connect OCID Button design (Figma) is here: https://www.figma.com/design/WuuckXVc6Q080lVHcFUS9k/Connect-OCID-Button-Guidelines?node-id=0-1&t=t6lloh4lipJDraBU-0
+
+Why do i need this?
+To integrate your product with the OpenCampus ecosystem, you need to retrieve and associate the OCIDs of your users within your system. The "Connect with OCID" functionality works similarly to "Login with Twitter" or "Login with Google." Our product suite provides a JavaScript SDK that you can integrate into your site, enabling users to log into OCID with a simple button click.
+
+How long does it work?
+This SDK provides an OAuth/OIDC interface to facilitate integration for our partners.
+
+Javascript-based SDK
+The SDK includes a JavaScript wrapper for our authentication APIs.
+It also provides a set of React components for seamless integration into React applications.
+Integration instructions are available in the package README on the public npm site.
+Interoperability
+The Connect with OCID APIs fully implement the OIDC standard, allowing developers to choose custom integration with our authentication APIs.
+We enforce the OIDC Code Flow with PKCE for enhanced security.
+Development
+A Sandbox environment is available and can be easily activated in the SDK for development purposes.
+The Sandbox environment does not require redirect_uri whitelisting, enabling developers to test their integrations before going live.
+Connecting to production
+By default, you will only be able to integrate with the “Sandbox” environment. To be whitelisted to interact with the production version, you will need to complete the following form! Make sure to give us the correct site link, as this will whitelist your app’s site at the domain level.
+
+The form is here: https://forms.gle/g5JXqaJLCFkuznb57.
+
+Services
+Here you will find common services and tools available to developers building dApps on the Custom Rollup, including sample configurations, and guides for many important elements of our infrastructure, including:
+
+Account Abstraction
+note
+Please note that this section is under active development.
+
+Overview
+The Ethereum blockchain network has two central types of accounts: externally owned accounts (EOAs) and contract accounts. EOAs are controlled by users; meanwhile, contract accounts are managed by smart contract code. Both account types are essential for the Ethereum ecosystem. However, EOAs are required to interact with the network, as they are the only way for you to initiate transactions and execute smart contracts.
+
+The problem with EOAs is their limitation to basic operations. And this restricts your options for interacting with the Ethereum blockchain. For example
+
+Poor Security: EOAs are secured by private keys, which are vulnerable to theft and loss.
+Lack of customization: We must initiate transactions from EOAs, which means that we can’t customize the transaction flow. For example, we can’t set up automatic payments or multi-factor authentication or define custom rules.
+Gas Payment: Account must hold ETH to pay for gas fees. This is a significant barrier to entry for new users.
+What are the benefits of Account Abstraction?
+Increased Security: We manage conventional Ethereum accounts using seed phrases and private keys. This can be problematic if a user loses their seed phrase or accidentally leaks their private key. With account abstraction you’re given more opportunities to implement additional options for both account recovery and authentication.
+
+Improved User Experience: With account abstraction, we can create smart contract wallets that can be used to implement a wide range of features. For example, we can create wallets that automatically pay for gas fees, wallets that require multi-factor authentication, and wallets that can be recovered using a social recovery mechanism.
+
+Safe
+To be updated when Safe Multisig app available on Open Campus.
+
+Zero Dev
+ZeroDev is a smart, white-labeled, and modular embedded wallet for building user-friendly Web3 experiences, particularly for DeFi applications.
+
+Smart: ZeroDev leverages account abstraction. White-labeled: ZeroDev doesn't have a UI -- it provides the underlying wallet logic that you can build a totally customized experience on top of. Modular: ZeroDev is built on top of Kernel, the most popular open-source smart account that supports ERC-7579 plugins for customizing wallet logic. ZeroDev is one of the most trusted solutions in AA, powering more than 50% of all AA wallets and a majority of DeFi volume that leverages AA.
+
+Before starting please go ahead into ZeroDev Dashboard and create a project on Open Campus, so you will get a Project ID,
+
+Please find a quickstart [here]
+
+When instantiating the react component please include bundlerProvider="GELATO".
+
+  <React.StrictMode>
+       <ZeroDevProvider
+            projectId={YOUR PROJECT ID}
+            bundlerProvider="GELATO"
+          >
+        </ZeroDevProvider>
+
+  </React.StrictMode>
+
+  Automation & Off-chain Data
+The Problem
+In the realm of blockchain development, especially with decentralized applications (dApps), a significant challenge emerges in the form of limited auto-execution capabilities. Traditionally, smart contracts, despite their advanced functionalities, lack the inherent ability to initiate or call methods automatically. This limitation poses a hurdle in the seamless operation and scalability of blockchain applications.
+
+The Solution
+To address this gap, automation solutions have been developed. These systems are designed to monitor both on-chain and off-chain data sources continuously. They are programmed to recognize specific predefined conditions. Once these conditions are met, the automation system springs into action, executing the necessary transactions without human intervention.
+
+Use cases
+Auto Harvesting in DeFi: In decentralized finance applications, automation can manage yield farming strategies, harvesting rewards automatically when they reach a certain threshold, thereby optimizing the return on investment for users.
+Limit Orders in Trading: Automated systems can execute trades when certain price points are hit, mirroring the functionality of limit orders in traditional trading but within a decentralized environment.
+Read more about Gelato Web3 functions below!
+
+Gelato Web3 Functions
+Overview
+Gelato's Web3 Functions is a powerful automation system designed to streamline and enhance Web3 operations. Web3 Functions serve as a comprehensive tool, enabling developers to effortlessly set up, manage, and automate their smart contract tasks. Determining your Needs
+
+Off-chain Data or Computation? Sometimes, automation tasks require data that isn't readily available on the blockchain, or they might need computations that are better performed off-chain. In such cases, Typescript Functions should be the choice.
+
+All Checks On-chain? If all the conditions necessary for your automation task can be directly verified on the blockchain, you have the option to select between Typescript Functions, Solidity Functions & Automated Transactions
+
+Triggers
+Time Interval Description: Use this trigger to execute tasks at regular intervals, e.g., every 10 minutes or once every 24 hours. It's like setting a straightforward, recurring alarm.
+Cron Expressions Description: This offers a more refined control compared to the Time Interval. With cron expressions, you can set tasks to run at specific moments, such as "every Tuesday at 3 PM" or "on the 1st of every month". It gives you precision in task scheduling.
+On-Chain Event Description: Ideal for those wanting their tasks to respond dynamically to blockchain activities. Whenever a specified event occurs on the blockchain, this trigger springs your task into action. It's like a vigilant watcher, always ready to act.
+Every Block Description: This function operates with the rhythm of the blockchain itself, executing your chosen function each time a new block is created.
+What to Execute?
+Typescript Functions
+Typescript Functions are decentralized cloud functions that work similarly to AWS Lambda or Google Cloud, just for web3. They enable developers to execute on-chain transactions based on arbitrary off-chain data (APIs / subgraphs, etc) & computation. These functions are written in Typescript, stored on IPFS and run by Gelato.
+
+Solidity Functions
+Solidity Functions are crucial for making on-chain tasks automatic and more efficient. They connect set conditions with specific actions in a smart contract, providing a straightforward method to turn user needs into automated processes. Consider them as a set of "if-then" rules: If certain conditions are met on the blockchain, then a specific function gets executed. This level of automation ensures that the decentralized application can operate with minimal manual intervention, providing a seamless user experience.
+
+Automated Transaction
+Automated Transaction ensures that a specific function on the target smart contract gets reliably triggered. When you pre-define the inputs, it means that every time Gelato initiates the function call, it uses consistent, predetermined arguments.
+
+Quick Start
+Writing & Deploying Typescript Functions
+Clone the hardhat-template repo
+git clone web3-functions-hardhat-template
+
+CD into the folder and install
+cd web3-functions-hardhat-template && yarn install
+
+Update the index.ts in one of the examples
+Web3Function.onRun(async (context: Web3FunctionContext) => {
+  const { userArgs, multiChainProvider } = context;
+
+  const provider = multiChainProvider.default();
+  // Retrieve Last oracle update time
+  const oracleAddress =
+    (userArgs.oracle as string) ?? "0x71B9B0F6C999CBbB0FeF9c92B80D54e4973214da";
+
+  // YOUR CUSTOM LOGIC
+  .....
+
+  // Return if nothing has to be pushed on-chain
+    return { canExec: false, message: `Coingecko call failed` };
+
+  // Return if tx has to be pushed on-chain
+  return {
+    canExec: true,
+    callData: [
+      {
+        to: oracleAddress,
+        data: oracle.interface.encodeFunctionData("updatePrice", [price]),
+      },
+    ],
+  };
+});
+
+Deploy the Web3 Function to IPFS and create the Task
+npx w3f deploy web3-functions/YOUR-FUNCTION/index.ts
+
+Result:
+
+$ npx w3f deploy web3-functions/YOUR-FUNCTION/index.ts
+ ✓ Web3Function deployed to ipfs.
+ ✓ CID: QmYMysfAhYYYrdhVytSTiE9phuoT49kMByktXSbVp1aRPx
+
+To create a task that runs your Web3 Function every minute, visit:
+> https://beta.app.gelato.network/new-task?cid=QmYMysfAhYYYrdhVytSTiE9phuoT49kMByktXSbVp1aRPx
+✨  Done in 3.56s.
+
+Finally, go to the Gelato App, create a new task, decide on the trigger, and input the CID.
+
+
+Writing & Deploying Solidity Functions
+The central part of a solidity function is the Checker. A Checker acts as a bridge between conditions and smart contract executions. Its purpose? To check conditions and determine whether a task should be executed by Gelato. Every checker returns two main things:
+
+canExec (Boolean): Indicates if Gelato should execute the task.
+execData (Bytes): Contains the data that executors will use during execution.
+Once you have deployed your checker, go to the Gelato App, create a new task, decide the trigger, and input the address of the checker contract and the method that does the check.
+
+https://beta.app.gelato.app/
+
+Bridges
+note
+Please note that this section is under active development.
+
+What is a Bridge?
+Bridges are a way to connect two different blockchains. They are a special type of smart contract that allows you to lock up tokens on one blockchain and mint the same amount of tokens on another blockchain. This is a very useful feature, as it allows you to transfer tokens between different blockchains. For example, you can transfer tokens from the Ethereum blockchain to the Binance Smart Chain (BSC) blockchain.
+
+Layer Zero
+LayerZero is a messaging protocol, not a blockchain. Using smart contracts deployed on each chain, in combination with Decentralized Verifier Networks (DVNs) and Executors, LayerZero enables different blockchains to seamlessly interact with one another.
+
+Getting Started
+To start sending omnichain messages with LayerZero, you only need to implement two functions:
+
+_lzSend: This function is used to send a message to a different chain.
+_lzSend(
+  _dstEid, // the destination endpoint id
+  _payload, // encoded message payload being sent
+  _options, // message execution options
+  MessagingFee(msg.value, 0), // the fee in native gas and ZRO token
+  payable(msg.sender) // refund address in case of failed source message
+);
+
+_lzReceive: This function is used to receive a message from a different chain.
+function _lzReceive(
+  Origin calldata _origin, // struct containing srcEid, sender address, and the message nonce
+  bytes32 _guid, // global message packet identifier
+  bytes calldata payload, // encoded message being received
+  address _executor, // the address of who executed the message
+  bytes calldata _extraData // appended executor data for the call
+) internal override {
+  data = abi.decode(payload, (string)); // your receive logic here
+}
+
+
+LayerZero offers Contract Standards that simplify this implementation by providing out of the box message handling, interfaces for custom protocol configurations, and other quality of life improvements:
+
+OApp: the base contract standard for omnichain messaging and configuration.
+
+OFT: the base contract standard for omnichain messaging and configuration.
+
+Prerequisites
+You should first be familiar with writing and deploying contracts to your desired blockchains. This involves understanding the specific smart contract language and the deployment process for those chains.
+A wallet set up and funded for the chains you'll be working with.
+Deploying your Contracts
+note
+This example can be used with any EVM compatible chain.
+
+To learn how to deploy your contracts, please refer to the Deploying Contracts section.
+
+To checkout endpoint addresses please refer to the Endpoints section in the layerzero docs.
+
+Connecting your Contracts
+To connect your contracts, call setPeer and pass the address of your destination contract as a bytes32 value, as well as the destination endpoint ID. If successful, you now should be setup to start sending cross-chain messages!
+
+To go more in depth, please refer to the Getting Started section in the layerzero docs.
+
+Indexers
+Understanding Blockchain Indexing
+Blockchain technology, often likened to a digital ledger, securely records data in encrypted blocks distributed across a decentralized network. Each block in the chain not only contains a record of new transactions but also carries information from the preceding block. However, due to blockchain's sequential structure, the associated data is dispersed across numerous blocks without an inherent system for identifying or extracting specific, higher-level data.
+
+Blockchain indexing steps in to address this. It allows users to efficiently search and filter through blockchain data, akin to how one might use Google, Bing, or other search engines to find information on the internet.
+
+Challenges in Indexing Blockchain Data
+Indexing data within a decentralized infrastructure like blockchain presents several obstacles:
+
+Absence of a Standard Query Language: Blockchain's immutable nature complicates direct data reading, as it lacks a built-in query language similar to SQL in traditional databases. To access even basic information such as a user's transaction history, one would have to examine each block individually.
+Complexities in Data Retrieval: The node structure of blockchains, particularly those akin to Ethereum, complicates data retrieval. Historical records are typically spread across various events and stored in separate sections of a node. Limited access to these events in some public nodes can significantly slow down the query process.
+Limitations of Existing APIs: The APIs currently available are often restricted to basic queries. These include range queries (such as records from a specific timeframe or a certain number of transactions) and top-k queries (which rank different data points relatively). This limitation hinders the ability to conduct more complex data analyses or searches.
+Subgraphs: A Key Solution
+One of the most promising solutions to the challenges of indexing blockchain data is the use of subgraphs. Subgraphs are essentially predefined data structures that are designed to efficiently index and query data from a blockchain.
+
+What are Subgraphs?
+Subgraphs are open-source APIs that allow developers to extract data from a blockchain and store it in a structured format. They are designed to be flexible, allowing developers to define the data they want to extract and how they want to store it. This flexibility enables subgraphs to be used for a wide range of applications, from simple data retrieval to more complex data analysis.
+
+Advantages of Subgraphs
+Customized Data Views: Developers can create subgraphs tailored to their specific needs, focusing on the particular data they're interested in.
+Real-time Data Updates: Subgraphs can update their indexed data in real-time with each new block on the blockchain, ensuring up-to-date information.
+Decentralized and Open: Like blockchains, subgraphs can be hosted in a decentralized manner, promoting transparency and accessibility.
+Read more about Goldsky Indexers below!
+
+Goldsky
+Install + log in
+Create an account at app.goldsky.com.
+Create an API key on the Settings page.
+Install the Goldsky CLI:
+curl https://goldsky.com | sh
+
+Log in with the API key created earlier:
+goldsky login
+
+Build and deploy
+Deploy your subgraph in one of four ways:
+
+Build and deploy from source
+cd <your-subgraph-directory>
+graph build # Build your subgraph as normal.
+goldsky subgraph deploy my-subgraph/1.0.0
+
+Build & Deploy from ABI and address
+goldsky subgraph deploy your-subgraph-name/your-version --from-abi <path-to-config-file>
+
+Query Endpoint
+Access data by querying the endpoints. Use the following command to list all your subgraphs, and open the “GraphQL API” links that get printed in your browser to query your data in the GraphQL playground.
+
+goldsky subgraph list
+
+https://app.goldsky.com/
+
+Oracles
+Overview
+Blockchain oracles are third-party services or agents that provide smart contracts with external information and serve as bridges between blockchains and the external world. Because blockchains cannot access external data (outside of their network) due to their secure and deterministic nature, oracles are used to fetch, verify, and relay real-world data to smart contracts in a way that's trustworthy.
+
+Use Cases
+Decentalized Finance (DeFi)
+Oracles provide price feeds, enabling DeFi platforms to calculate token values, manage collateral, and execute liquidations. By sourcing data from various exchanges and financial platforms, oracles contribute to the robustness of DeFi applications.
+
+Gaming
+Blockchain-based gaming and betting platforms use oracles to determine the outcomes of events, such as sports matches or random number generation. By connecting to various data sources and verifying results, oracles ensure fair and transparent gaming experiences.
+
+Insurance
+Oracles can be employed in the insurance industry to automate claims processing and underwriting. They can fetch data related to weather conditions, flight delays, or health records, enabling insurers to create parametric insurance products. This reduces fraud and ensures quicker payouts based on predefined triggers.
+
+and much more...
+
+DIA
+DIA token price feeds provide smart contract real-time price information of 3,000+ cryptocurrencies, transparently sourced from 80+ trusted, high-volume DEXs and CEXs.
+
+The feeds facilitate the development of DeFi use cases such as money markets, lending/borrowing, synthetic asset issuance, options, derivatives and futures markets, and many more.
+
+How to access DIA's oracle?
+Here is an example of how to retrieve price value from a standard DIA oracle. For the purpose of this example, we will be using the following demo oracle on Ethereum: 0xa935...5856.
+
+Access any DIA oracle smart contract.
+Call getValue(pair_name) with pair_name being the full pair name such as BTC/USD. You can use the "Read" section on Etherscan to execute this call.
+The response of the call contains four values:
+The current asset price in USD with a fix-comma notation of 8 decimals.
+the UNIX timestamp of the last update.
+Oracle Integration Example
+Here is an example on how you can integrate DIA's oracle into your smart contract with Solidity:
+
+pragma solidity ^0.8.13;
+
+interface IDIAOracleV2{
+    function getValue(string memory) external returns (uint128, uint128);
+}
+
+contract IntegrationSample{
+
+    address immutable ORACLE = 0xa93546947f3015c986695750b8bbEa8e26D65856;
+    uint128 public latestPrice;
+    uint128 public timestampOflatestPrice;
+
+    function getPriceInfo(string memory key) external {
+        (latestPrice, timestampOflatestPrice) = IDIAOracleV2(ORACLE).getValue(key);
+    }
+
+    function checkPriceAge(uint128 maxTimePassed) external view returns (bool inTime){
+         if((block.timestamp - timestampOflatestPrice) < maxTimePassed){
+             inTime = true;
+         } else {
+             inTime = false;
+         }
+    }
+}
+
+Find more detailed description of the functions and how to run test in this GitHub repository
+
+DIA has a dedicated Solidity library to facilitate integration of DIA oracles in your own contracts. The library consists of two functions, getPrice and getPriceIfNotOlderThan. You can learn more about the library and how to use it in the DIA documentation.
+
+Relay
+What is Relaying?
+Standard Transactions
+In a standard Ethereum transaction, an ethereum user signs and sends the transaction themselves. This user controls the private key to an externally owned account (EOA) which they can use to sign a transaction and prove they have the right to spend the balance associated with that account address. For each transaction a user sends, there is an associated transaction fee, known as gas. Since Ethereum executes computation, each unit of computation has an associated gas cost, which deters malicious actors from overloading the network by requiring them to pay heavily for a potential attack. This is excellent news for Ethereum's security and helps keep the network consistent under load, but it comes at a hidden cost for onboarding new users.
+
+Onboarding Issues
+How does a new user start interacting with exciting on-chain applications like DeFi, NFTs, or gaming? They will always need the native token to pay for gas on every network, even if the network has very cheap gas fees like Polygon. This requires the user to open an account at a centralised exchange, go through KYC, and buy crypto using fiat. This can be quite a process, even for the most skilled of degens out there, and it can deter new users from being onboarded to a dApp by increasing the latency between their initial excitement and the time it takes to actually get started. This is where relaying comes in! A relayer can help solve these issues by sending a transaction on behalf of the user.
+
+What is a Relayer?
+We allow the user to send a transaction without a native token balance (it turns out relayers can be super nifty in loads of ways, for example, allowing a user who wants to swap a token to pay for the gas using the token being swapped!). Ideally, we would also like to still utilise the excellent security of a user signature, but for the transaction to be sent by a different EOA, one controlled by a relayer, who abstracts gas payment away from the user. This is a very import context shift to understand. We have shifted from a user signing and sending a transaction themselves, to a user signing a standardised message and passing that on to a relayer. This relayer will, first, verify the user's signature for security, and then pass their message along on-chain. Gelato Relay does exactly this by taking a user's message off-chain and subsequently building a meta-transaction which is executed on chain.
+
+Meta Transactions and EIP-712
+A meta transaction is a regular ethereum transaction which contains the actual message to be delivered on-chain to a target contract within itself, hence the term meta. The outer transaction helps facilitate the first on-chain call which is sent by a relayer. The call is forwarded to the target contract using an intermediate smart contract (Gelato Relay), which in turn forwards the call using the inner transaction to deliver the relayed message.
+
+To achieve gasless transactions securely, Gelato Relay makes use of the EIP-712 standard. EIP-712 allows for a standardised way to sign and hash typed structured data. This means the user can sign a message using their wallet without incurring a gas cost or interacting with the chain at all, and this signature can be verified on-chain, by the relayer, facilitating a gasless transaction with security built in. This message will include important information such as the transaction signer address, the target contract address, and the calldata payload used to target a specific function.
+
+Gelato Relay
+Introduction
+Using Gelato Relay, we relay your user's transactions on-chain, enabling secure gasless transactions for an ultra-smooth UX for your app. This allows for a variety of new web3 experiences, as the user can now pay by only signing a message, or their transaction costs can be sponsored by the developer. As long as the gas costs are covered in one of the multiple payment methods that Gelato supports, we handle the rest reliably, quickly and securely.
+
+
+Prerequisites
+"node": ">=14.0.0"
+Basic JavaScript knowledge.
+ethers knowledge
+Getting started
+1: Installation
+Install the Gelato Relay SDK
+
+yarn add @gelatonetwork/relay-sdk
+
+2: Choose the Method
+At this point, you will need to answer the following questions, which will determine the method to use when calling the Gelato Relay.
+
+Do you require user authentication? When the use-case requires to authenticate the original user, you will need to implement the ERC2771 method where the user will sign the payload, and the original user will be decoded on-chain from the callData replacing msg.sender through _msgSender(), please see additional info here.
+
+What is the funding strategy? When relaying a transaction, the Gelato Nodes are paying the gas fees. There are two different ways of paying the fees back to Gelato. Either creating a 1Balance account and deposit USDC on polygon that will pay for all of the transactions on all EVM chains Gelato is deployed; or transferring back to gelato the fees while the transaction is executing, we call these methods syncFee, more info can be found here, in this latter case, the target contract would need to inherit the "Gelato Relay Context" contracts, so the methods to query and transfer the fee to Gelato are available.
+
+If you require user authentication and you want to pay the transactions with a 1Balance account, the method to use is the sponsoredCallERC2771.
+
+If you require user authentication and you want every transaction to pay for itself, transferring by execution the fees to Gelato, the method to use is the callWithSyncFeeERC2771.
+
+If you don't require user authentication and you want to pay the transactions with a 1Balance account, the method to use is the sponsoredCall.
+
+If you don't require user authentication and you want every transaction to pay for itself, transferring the fees by execution to Gelato, the method to use is the callWithSyncFee.
+
+3: Implementation
+We will require three simple steps to implement Gelato Relay. Here, we are going to showcase the three steps required to implement the method sponsoredCallERC2771, which is the most used one.
+
+Step 1: Inherit Context Contract
+Depending on the method, you must inherit different contracts as they will provide other methods. In this case, we will have to inherit the ERC2771Context. The ERC2771Context provide us with the methods _msgSender() and _msgData() that will allow us to recover the original user sending the transaction.
+
+import {
+    ERC2771Context
+} from "@gelatonetwork/relay-context/contracts/vendor/ERC2771Context.sol";
+
+contract CounterERC2771 is ERC2771Context {
+
+    // ERC2771Context: setting the immutable trustedForwarder variable
+    constructor(address trustedForwarder) ERC2771Context(trustedForwarder) {}
+
+    function incrementContext() external {
+
+        // Incrementing the counter mapped to the _msgSender!
+        contextCounter[_msgSender()]++;
+
+        // Emitting an event for testing purposes
+        emit IncrementContextCounter(_msgSender());
+    }
+}
+
+Step 2: Import the relay SDK
+In your frontend/backend, you would need to import and instantiate the relay class.
+
+import { GelatoRelay, SponsoredCallERC2771Request } from "@gelatonetwork/relay-sdk";
+const relay = new GelatoRelay(API_KEY);
+
+Step 3: Send the payload to Gelato
+This is an example using Gelato's CounterERC2771.sol, which is deployed on these networks.
+
+// Set up on-chain variables, such as target address
+const counter = "0x00172f67db60E5fA346e599cdE675f0ca213b47b";
+const abi = ["function incrementContext()"];
+const provider = new ethers.BrowserProvider(window.ethereum);
+const signer = provider.getSigner();
+const user = signer.getAddress();
+
+// Generate the target payload
+const contract = new ethers.Contract(counter, abi, signer);
+const { data } = await contract.incrementContext.populateTransaction();
+
+// Populate a relay request
+const request: CallWithERC2771Request = {
+  chainId: (await provider.getNetwork()).chainId,
+  target: counter;
+  data: data;
+  user: user;
+};
+
+// Without a specific API key, the relay request will fail!
+// Go to https://relay.gelato.network to get a testnet API key with 1Balance.
+// Send a relay request using Gelato Relay!
+const relayResponse = await relay.sponsoredCallERC2771(request, provider, apiKey);
+
+Tracking your Request
+When submitting your Gelato Relay requests, you'll receive a taskId in response. This taskId allows you to track the status of your request in two primary ways:
+
+WebSocket Subscriptions: This is the recommended and most efficient method. By subscribing via WebSocket, the Gelato backend will automatically push updates for all your tasks to your Relay SDK client. To start receiving these updates, you must register a callback function, which will be triggered every time one of your tasks gets updated. Detailed implementation can be found here.
+
+Polling for Updates: Alternatively, you can periodically query the Gelato task status API for updates. If you're using the Gelato Relay SDK, the getTaskStatus method makes this easy. Detailed implementation can be found here.
+
+Wallets
+Overview
+Wallet as a Service (WaaS) is essentially a modern solution for managing digital assets, tailored for businesses and institutions. It's like having a digital wallet, but with advanced features and security designed for professional use.
+
+At its core, WaaS provides a secure and scalable way to handle cryptocurrencies and other digital assets. It's designed to be flexible, catering to the needs of various businesses, regardless of their size.
+
+Key Features
+Ease of Use and Security: It strikes a balance between being user-friendly and maintaining high security, ensuring that managing digital assets is straightforward without compromising safety.
+Integration with Multiple Blockchains: WaaS allows for seamless connection with various blockchain networks. This means businesses can manage different types of digital assets across different blockchains all in one place.
+Key Recovery System: One of the challenges with digital wallets is the risk of losing access keys. WaaS typically includes a system for recovering these keys, adding an extra layer of safety and peace of mind.
+Low-Cost Fees: It's designed to be cost-effective, minimizing the expenses associated with digital asset management.
+WaaS offers a comprehensive digital wallet solution that addresses the main challenges of modern digital asset management, combining ease of use, security, efficient blockchain integration, a reliable key recovery system, and affordability.
+
+Privy
+The Privy React SDK is the easiest way to onboard your users to web3 in your React App.
+
+With just nine minutes of setup, you get out-of-the-box support for:
+
+A variety of login methods, including email, phone, wallets, and social
+Customizable UIs to progressively onboard your users
+Self-custodial embedded wallets and powerful connectors for external wallets
+For a Quickstart please visit here
+
+When using privy on Open Campus Testnet, please bear in mind that defaultChain and supportedChainshave to be included in the chain config.
+
+<PrivyProvider
+  appId="your-privy-app-id"
+  config={{
+    // Customize Privy's appearance in your app
+    appearance: {
+      theme: 'light',
+      accentColor: '#676FFF',
+      logo: 'https://your-logo-url',
+    },
+    // Create embedded wallets for users who don't have a wallet
+    embeddedWallets: {
+      createOnLogin: 'users-without-wallets',
+    },
+
+    // Custom congif here
+        defaultChain: openCampusChain,
+        supportedChains: [openCampusChain],
+
+  }}
+>
+</PrivyProvider>
+
+
+// OpenCampusChain definition here
+import { defineChain } from "viem-15";
+const openCampusChain= defineChain ({
+        id: 656476,
+        network: "Open Campus Codex",
+        name: "Open Campus Codext",
+        nativeCurrency: {
+            name: "EDU",
+            symbol: "EDU",
+            decimals: 18,
+        },
+        rpcUrls: {
+            public: {
+                http: ["https://rpc.open-campus-codex.gelato.digital"],
+            },
+            default: {
+                http: ["https://rpc.open-campus-codex.gelato.digital"],
+            },
+        },
+        blockExplorers: {
+            default: {
+                name: "Block Scout",
+                url: "https://opencampus-codex.blockscout.com/",
+            },
+        },
+        contracts: {
+        },
+        testnet: true,
+    }),
+
+    Web3Auth
+Web3Auth is a pluggable wallet infrastructure for Web3 wallets and applications. It streamlines the onboarding of both mainstream and crypto native users in under a minute by providing experiences that they're most comfortable with. With support for all OAuth-based login systems, web & mobile native platforms, Web3Auth provides a seamless onboarding experience for your users
+
+You can follow a quick start guide here
+
+In order to use Web3Auth on Open Campus testnet we will need to adap the network config file to
+
+const  chainConfig: {
+    chainNamespace: "eip155", 
+    chainId: "0xA045C",// Cahin Id 656476 in hex
+    rpcTarget: "https://rpc.open-campus-codex.gelato.digital",
+    displayName: "Open Campus Codex",
+    blockExplorer: "https://opencampus-codex.blockscout.com/",
+    ticker: "EDU",
+    tickerName: "EDU",
+  },
+
+  Community Forum
+Welcome to our Community Forum, a vibrant hub for developers, enthusiasts, and innovators in the Web3 space.
+
+Why Participate?
+Collaboration: Share ideas, collaborate on projects, and build together.
+Support: Get answers to your queries and help others.
+Stay Informed: Keep up with the latest trends and updates in Web3.
+Guidelines
+Respect: Maintain a respectful and constructive environment.
+No Spam: Avoid promotional content unrelated to Web3.
+Search First: Check if your question has already been answered.
+How to Get Started
+Register: Sign up to participate in discussions.
+Introduce Yourself: Let the community know about your interests and expertise.
+Engage: Start discussions, share insights, and provide feedback.
+Resources
+FAQ: Common questions and answers.
+Documentation: In-depth guides and tutorials.
+Community Guidelines
+Join our community today and be a part of the Web3 revolution!
+
+https://open-campus-docs.vercel.app/support-ressources/community-forum#
+
+Developer Support
+Welcome to the Developer Support section, your go-to resource for technical assistance and guidance.
+
+What We Offer
+Technical Assistance: Expert support for your development queries and challenges.
+Documentation: Comprehensive guides and API documentation.
+Community Support: Access to a community of experienced Web3 developers.
+How to Get Support
+Browse Documentation: Find quick answers in our detailed documentation.
+Submit a Ticket: If you can't find an answer, submit a support ticket.
+Community Forums: Engage with the community for diverse perspectives.
+Best Practices
+Clear Descriptions: Provide detailed descriptions of your issues for quicker resolutions.
+Include Code Snippets: Share relevant code snippets to clarify your queries.
+Be Patient: Responses may take time due to the volume of inquiries.
+Contact Support Developer Documentation
+
+We're here to ensure your success in the Web3 ecosystem!
