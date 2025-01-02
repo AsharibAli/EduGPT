@@ -76,8 +76,7 @@ const EduGPT = () => {
                 },
                 chatWindow: {
                   showTitle: true,
-                  title:
-                    "🤖 EduGPT (First AI Blockchain Explorer) ✨",
+                  title: "EduGPT - First AI Blockchain Explorer 🤖",
                   welcomeMessage:
                     "Welcome to EduGPT! I'm here to help you explore the EduChain Ecosystem, Analyze the complex blockchain data, build your dApps, and so much more on EduChain 👈",
                   errorMessage:
