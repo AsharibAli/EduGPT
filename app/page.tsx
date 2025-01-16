@@ -74,9 +74,21 @@ const EduGPT = () => {
                   iconColor: "white",
                   dragAndDrop: true,
                 },
+                disclaimer: {
+                  title: 'EduGPT Disclaimer',
+                  message: 'By using this chatbot, you agree to the <a target="_blank" href="https://eduhub.dev/terms">Terms & Condition</a>',
+                  textColor: 'black',
+                  buttonColor: '#008080',
+                  buttonText: 'Start Chatting',
+                  buttonTextColor: 'white',
+                  blurredBackgroundColor: 'rgba(0, 0, 0, 0.4)', //The color of the blurred background that overlays the chat interface
+                  backgroundColor: 'white',
+                  denyButtonText: 'Cancel',
+                  denyButtonBgColor: '#ef4444',
+                },
                 chatWindow: {
                   showTitle: true,
-                  title: "🤖 EduGPT - AI Blockchain Explorer ✨",
+                  title: "🤖 EduGPT - The First AI Blockchain Explorer for EduChain ✨",
                   welcomeMessage:
                     "Welcome to EduGPT! I'm here to help you explore the EduChain Ecosystem, Analyze the complex blockchain data, build your dApps, and so much more on EduChain 👈",
                   errorMessage:
@@ -107,8 +119,8 @@ const EduGPT = () => {
                     maxCharsWarningMessage:
                       "You exceeded the characters limit. Please input less than 500 characters.",
                     autoFocus: true,
-                    sendMessageSound: true,
-                    receiveMessageSound: true,
+                    // sendMessageSound: true,
+                    // receiveMessageSound: true,
                   },
                   feedback: {
                     color: "#000000",
@@ -122,11 +134,6 @@ const EduGPT = () => {
                     text: "Build with ❤️ by",
                     company: "EduHub 📚",
                     companyLink: "https://eduhub.dev/",
-                  },
-                  disclaimer: {
-                    title: "Disclaimer",
-                    message:
-                      'By using this chatbot, you agree to the <a target="_blank" href="https://flowiseai.com/terms">Terms & Condition</a>',
                   },
                 },
               },
