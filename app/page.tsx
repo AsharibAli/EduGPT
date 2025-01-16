@@ -75,8 +75,8 @@ const EduGPT = () => {
                   dragAndDrop: true,
                 },
                 disclaimer: {
-                  title: 'EduGPT Disclaimer',
-                  message: 'By using this chatbot, you agree to the <a target="_blank" href="https://eduhub.dev/terms">Terms & Condition</a>',
+                  title: '➡️ EduGPT is live on EduChain Mainnet 🔥',
+                  message: 'By using this chatbot, you agree to the <a target="_blank" href="https://eduhub.dev/terms">Terms & Condition</a> of EduHub.',
                   textColor: 'black',
                   buttonColor: '#008080',
                   buttonText: 'Start Chatting',
