@@ -28,17 +28,20 @@ interface DecodedToken {
 const EduGPT = () => {
   const { authState } = useOCAuth();
   const [userInfo, setUserInfo] = useState<DecodedToken | null>(null);
-  const [showUserCard, setShowUserCard] = useState(false); // State for toggling user info card
+  const [showUserCard, setShowUserCard] = useState(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   useEffect(() => {
-    if (authState?.idToken) {
+    if (authState?.idToken && !isAuthenticating) {
+      setIsAuthenticating(true);
       const decoded = jwtDecode<DecodedToken>(authState.idToken);
       setUserInfo(decoded);
+      window.location.reload();
     }
-  }, [authState?.idToken]);
+  }, [authState?.idToken, isAuthenticating]);
 
-  const toggleUserCard = () => setShowUserCard(!showUserCard); // Toggle visibility of user card
-
+  const toggleUserCard = () => setShowUserCard(!showUserCard);
+  
   return (
     <div
       className={`min-h-screen flex flex-col justify-center items-center ${
