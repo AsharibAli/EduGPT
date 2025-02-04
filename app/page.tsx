@@ -32,16 +32,28 @@ const EduGPT = () => {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   useEffect(() => {
-    if (authState?.idToken && !isAuthenticating) {
-      setIsAuthenticating(true);
-      const decoded = jwtDecode<DecodedToken>(authState.idToken);
-      setUserInfo(decoded);
-      window.location.reload();
-    }
+    const handleAuth = async () => {
+      if (authState?.idToken && !isAuthenticating) {
+        try {
+          setIsAuthenticating(true);
+          const decoded = jwtDecode<DecodedToken>(authState.idToken);
+          setUserInfo(decoded);
+          // Add small delay before reload to ensure state is updated
+          setTimeout(() => {
+            window.location.reload();
+          }, 100);
+        } catch (error) {
+          setIsAuthenticating(false);
+          console.error("Auth error:", error);
+        }
+      }
+    };
+  
+    handleAuth();
   }, [authState?.idToken, isAuthenticating]);
 
   const toggleUserCard = () => setShowUserCard(!showUserCard);
-  
+
   return (
     <div
       className={`min-h-screen flex flex-col justify-center items-center ${
