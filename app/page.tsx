@@ -28,31 +28,16 @@ interface DecodedToken {
 const EduGPT = () => {
   const { authState } = useOCAuth();
   const [userInfo, setUserInfo] = useState<DecodedToken | null>(null);
-  const [showUserCard, setShowUserCard] = useState(false);
-  const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const [showUserCard, setShowUserCard] = useState(false); // State for toggling user info card
 
   useEffect(() => {
-    const handleAuth = async () => {
-      if (authState?.idToken && !isAuthenticating) {
-        try {
-          setIsAuthenticating(true);
-          const decoded = jwtDecode<DecodedToken>(authState.idToken);
-          setUserInfo(decoded);
-          // Add small delay before reload to ensure state is updated
-          setTimeout(() => {
-            window.location.reload();
-          }, 100);
-        } catch (error) {
-          setIsAuthenticating(false);
-          console.error("Auth error:", error);
-        }
-      }
-    };
-  
-    handleAuth();
-  }, [authState?.idToken, isAuthenticating]);
+    if (authState?.idToken) {
+      const decoded = jwtDecode<DecodedToken>(authState.idToken);
+      setUserInfo(decoded);
+    }
+  }, [authState?.idToken]);
 
-  const toggleUserCard = () => setShowUserCard(!showUserCard);
+  const toggleUserCard = () => setShowUserCard(!showUserCard); // Toggle visibility of user card
 
   return (
     <div
