@@ -18,25 +18,25 @@ const EduGPT = () => {
       className={`min-h-screen flex flex-col justify-center items-center ${userInfo ? "" : "pt-8"}`}
     >
       {!userInfo ? (
-        <LoginCard />
+      <LoginCard />
       ) : (
-        <div className="w-full">
-          <Chatbot />
-        </div>
+      <div className="w-full">
+        <Chatbot />
+      </div>
       )}
 
       {userInfo && (
-        <button
-          className="fixed top-1/2 right-4 transform -translate-y-1/2 bg-[#008080] text-white p-3 rounded-full shadow-lg hover:scale-110 transition-transform"
-          onClick={toggleUserCard}
-          title="User Info"
-        >
-          <UserIcon className="w-6 h-6" />
-        </button>
+      <button
+        className="fixed top-14 right-2 bg-[#008080] text-white p-3 rounded-full shadow-lg hover:scale-110 transition-transform"
+        onClick={toggleUserCard}
+        title="User Info"
+      >
+        <UserIcon className="w-5 h-5" />
+      </button>
       )}
 
       {showUserCard && userInfo && (
-        <UserInfoCard userInfo={userInfo} toggleUserCard={toggleUserCard} />
+      <UserInfoCard userInfo={userInfo} toggleUserCard={toggleUserCard} />
       )}
     </div>
   );
