@@ -1,5 +1,5 @@
 "use client";
-// components/OCIDProvider.tsx
+
 import { FC, ReactNode } from "react";
 import { OCConnect } from "@opencampus/ocid-connect-js";
 

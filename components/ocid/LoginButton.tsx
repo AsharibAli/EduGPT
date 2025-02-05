@@ -1,4 +1,3 @@
-"use client";
 import { useOCAuth } from "@opencampus/ocid-connect-js";
 import OCButton from "./OCButton";
 

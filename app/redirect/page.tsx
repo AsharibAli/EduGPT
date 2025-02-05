@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useOCAuth } from "@opencampus/ocid-connect-js";
+import { Loader } from "lucide-react";
 
 const RedirectPage = () => {
   const router = useRouter();
@@ -12,7 +13,7 @@ const RedirectPage = () => {
   };
 
   const loginError = () => {
-    router.push("/"); // Redirect to login page or show error message
+    router.push("/error"); // Redirect to login page or show error message
   };
 
   useEffect(() => {
@@ -26,14 +27,18 @@ const RedirectPage = () => {
     };
 
     handleAuth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ocAuth]);
 
   if (authState.error) {
     return <div>Error Logging in: {authState.error.message}</div>;
   }
 
-  return <div>Loading...</div>;
+  return (
+    <div className="flex flex-col justify-center items-center h-screen w-full">
+      <Loader size={48} />
+      <p className="text-black mt-2">Loading...</p>
+    </div>
+  );
 };
 
 export default RedirectPage;

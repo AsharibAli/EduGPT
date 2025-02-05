@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import OCIDProvider from "@/components/OCIDProvider";
+import OCIDProvider from "@/components/ocid/OCIDProvider";
 import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
