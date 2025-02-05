@@ -2,22 +2,6 @@ import React, { useEffect, useState } from "react";
 import Script from "next/script";
 
 const Chatbot = () => {
-  const [config, setConfig] = useState<{ chatflowId: string; apiHost: string } | null>(null);
-
-  useEffect(() => {
-    const fetchConfig = async () => {
-      const response = await fetch("/api/chatbot-config");
-      const data = await response.json();
-      setConfig(data);
-    };
-
-    fetchConfig();
-  }, []);
-
-  if (!config) {
-    return null;
-  }
-
   return (
     <div>
       <flowise-fullchatbot></flowise-fullchatbot>
@@ -28,8 +12,8 @@ const Chatbot = () => {
         onLoad={() => {
           if (window.Chatbot) {
             window.Chatbot.initFull({
-              chatflowid: config.chatflowId,
-              apiHost: config.apiHost,
+              chatflowid: process.env.NEXT_PUBLIC_CHATFLOW_ID,
+              apiHost: process.env.NEXT_PUBLIC_API_HOST,
               theme: {
                 button: {
                   backgroundColor: "#008080",
