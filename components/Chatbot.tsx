@@ -3,7 +3,7 @@ import Script from "next/script";
 
 const Chatbot = () => {
   return (
-    <div>
+    <div className="w-full">
       <flowise-fullchatbot></flowise-fullchatbot>
       <Script
         src="https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js"
