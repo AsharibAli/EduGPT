@@ -13,7 +13,7 @@ const RedirectPage = () => {
   };
 
   const loginError = () => {
-    router.push("/error"); // Redirect to login page or show error message
+    router.push("/"); // Redirect to login page or show error message
   };
 
   useEffect(() => {
