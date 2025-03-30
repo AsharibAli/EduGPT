@@ -22,7 +22,7 @@ const Chatbot = () => {
                   dragAndDrop: true,
                 },
                 disclaimer: {
-                  title: "➡️ EduGPT is live on EduChain Mainnet 🔥",
+                  title: "Disclaimer",
                   message:
                     'By using this chatbot, you agree to the <a target="_blank" href="https://eduhub.dev/terms">Terms & Condition</a> of EduHub.',
                   textColor: "black",
@@ -36,7 +36,8 @@ const Chatbot = () => {
                 },
                 chatWindow: {
                   showTitle: true,
-                  title: "🤖 EduGPT - The First AI Blockchain Explorer for EduChain ✨",
+                  title:
+                    "🤖 EduGPT - The First AI Blockchain Explorer for EduChain ✨",
                   welcomeMessage:
                     "Welcome to EduGPT! I'm here to help you explore the EduChain Ecosystem, Analyze the complex blockchain data, build your dApps, and so much more on EduChain 👈",
                   errorMessage:
