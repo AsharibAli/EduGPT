@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import OCIDProvider from "@/components/ocid/OCIDProvider";
 import Script from "next/script";
+import { BannerProvider } from "@/components/banner/BannerContext";
+import Banner from "@/components/banner/Banner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,7 +35,10 @@ export default function RootLayout({
   `}
       </Script>
       <body className={inter.className}>
-        <OCIDProvider>{children}</OCIDProvider>
+        <BannerProvider>
+          <Banner />
+          <OCIDProvider>{children}</OCIDProvider>
+        </BannerProvider>
       </body>
     </html>
   );
