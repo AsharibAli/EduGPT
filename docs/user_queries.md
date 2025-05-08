@@ -1,4 +1,4 @@
-# User Queries
+# User Queries Mapped to API Endpoints
 
 ---
 

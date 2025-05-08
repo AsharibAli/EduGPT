@@ -37,7 +37,7 @@ EduGPT is built with the OpenAI, LangChain, Flowise, Open Campus ID SDK, and so 
 - **OpenAI Assistant APIs**: Powers the natural language processing abilities to deliver accurate responses and maintain a conversational style with (function calling, code interpreter, and file search).
 - **FlowiseAI**: Customized LLM orchestration flow tool, powered by LangChain.
 - **Next.js, TypeScript, TailwindCSS**: Provides a seamless, dynamic user interface with a consistent design.
-- **OpenAI GPT-4o and Moderation APIs**: Handles advanced chatbot responses and content moderation.
+- **OpenAI GPT-4.1 and Moderation APIs**: Handles advanced chatbot responses and content moderation.
 - **Google Custom Search API**: Allows the chatbot to fetch relevant information online to provide up-to-date answers.
 - **Custom Training Data with Prompt Engineering**: Ensures precise responses through well-crafted prompts and curated data.
 - **OpenAI Whisper API for Speech-to-Text**: Supports speech recognition to deliver a multi-modal experience.
@@ -47,66 +47,17 @@ EduGPT is built with the OpenAI, LangChain, Flowise, Open Campus ID SDK, and so 
 
 ![FlowiseAI Flow Chart](./public/EduGPT.png)
 
-- [Flowise Github Repositry](https://github.com/flowiseai/flowise) (Backend deployed on Render and connected to the chatbot UI frontend on Vercel via APIs programmatically).
-- [FlowiseChatEmbed Github Repositry](https://github.com/flowiseai/FlowiseChatEmbed) (UI/UX of the Chatbot, Connected via CDN).
+- [Flowise GitHub Repository](https://github.com/flowiseai/flowise) - Backend service deployed on Render, programmatically integrated with the chatbot UI frontend on Vercel through REST APIs.
+- [FlowiseChatEmbed GitHub Repository](https://github.com/flowiseai/FlowiseChatEmbed) - Chatbot interface implementation, delivered through Content Delivery Network (CDN) for optimal performance.
 
-➡️ **[Access Web Application Here](https://ai.eduhub.dev/)** <br>
-➡️ **[Prompt used for Assistant Training](./prompt-engineering/prompt.md)** <br>
+## Quick Links
 
-### **Summary of Custom Tools to extract on-chain Created So Far**
-
-Read the [API_ENDPOINTS_OVERVIEW](./ai-explorer/api_endpoints_overview.md) file for more technical details about the API's.
-
-Read the [USER_QUERIES](./ai-explorer/user_queries.md) file for more details about example user queries with the endpoint calling and mapping.
-
-1. **Transaction-Related Tools:**
-   - `get_transaction_state_changes`
-   - `get_transaction_summary`
-   - `get_transaction_details`
-   - `get_transaction_token_transfers`
-   - `get_transaction_internal_transactions`
-   - `get_transaction_logs`
-   - `get_transaction_raw_trace`
-
-2. **Block-Related Tools:**
-   - `get_block_details`
-   - `get_block_transactions`
-   - `get_block_withdrawals`
-
-3. **Address-Related Tools:**
-   - `list_native_coin_holders`
-   - `get_address_details`
-   - `get_address_counters`
-   - `get_address_transactions`
-   - `get_address_token_transfers`
-   - `get_address_internal_transactions`
-   - `get_address_logs`
-   - `get_address_blocks_validated`
-   - `get_address_token_balances`
-   - `get_address_tokens`
-
-4. **Token-Related Tools:**
-   - `list_tokens`
-   - `get_token_details`
-   - `get_token_transfers`
-   - `get_token_holders`
-   - `get_token_counters`
-
-5. **Smart Contract-Related Tools:**
-   - `list_smart_contracts`
-   - `get_smart_contract_counters`
-   - `get_smart_contract_details`
-   - `get_smart_contract_methods_read`
-   - `get_smart_contract_methods_read_proxy`
-   - `get_smart_contract_methods_write`
-   - `get_smart_contract_methods_write_proxy`
-   - `execute_smart_contract_query`
-   - `get_json_rpc_url`
-
-6. **Withdrawal-Related Tools:**
-   - `list_withdrawals`
-
----
+- [Live Application](https://gpt.eduhub.dev/) - Try EduGPT in action
+- [Assistant Training Prompts](./docs/prompt_engineering.md) - View the prompts used to train the AI assistant
+- [API Documentation](./docs/api_endpoints_overview.md) - Technical details about API endpoints and custom tools
+- [Example User Queries](./docs/user_queries.md) - See real-world examples of user queries and API mappings
+- [Custom Tools](./docs/custom_tools.md) - View the custom tools created to extract on-chain (real-time) data
+- [Question & Answer](./docs/question_answer.md) - View the questions & answers documentation
 
 ## Future Improvements
 
